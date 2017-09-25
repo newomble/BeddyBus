@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BeddyBus.iml" filepath="$PROJECT_DIR$/BeddyBus.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BeddyBus-master.iml" filepath="$PROJECT_DIR$/BeddyBus-master.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

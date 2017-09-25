@@ -20,16 +20,22 @@ import java.util.Observer;
 
 public class WakeupScheduler implements AlarmManager.OnAlarmListener {
     private final Activity activity;
-    private final int wakeupInterval = 1000 * 60 * 5;// in milliseconds - 5minutes
+    private final int wakeupInterval = 1000 * 10;// in milliseconds - 5minutes
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationAlarmManager locationAlarmManager;
 
     private Location destination = null;
 
+    /**
+     * Deprecated for the Alarm Service which performs pretty much as this does but as a Service
+     * @param fusedLocationProviderClient
+     * @param _activity
+     */
+    @Deprecated
     public WakeupScheduler(FusedLocationProviderClient fusedLocationProviderClient, Activity _activity) {
         mFusedLocationClient = fusedLocationProviderClient;
         activity = _activity;
-        locationAlarmManager = new LocationAlarmManager(activity,wakeupInterval);
+        //locationAlarmManager = new LocationAlarmManager(activity,wakeupInterval);
     }
     public boolean startWakeups(){
         if(destination == null){
@@ -59,7 +65,7 @@ public class WakeupScheduler implements AlarmManager.OnAlarmListener {
                     @Override
                     public void onSuccess(Location location) {
                         if (location != null) {
-                            locationAlarmManager.set(location,destination,activity);
+                            locationAlarmManager.set(location,destination);
                         }
                     }
                 });
@@ -82,7 +88,7 @@ public class WakeupScheduler implements AlarmManager.OnAlarmListener {
         } catch (IndexOutOfBoundsException AE){
 
         }
-        if(! locationAlarmManager.alarmComplete() ) {
+        if(! locationAlarmManager.inRangeForAlarm() ) {
             setAlarm();
         }
     }
@@ -93,9 +99,6 @@ public class WakeupScheduler implements AlarmManager.OnAlarmListener {
 
     public void setDestination(Location destination) {
         this.destination = destination;
-    }
-    public void notifyProgress(Observer please){
-        locationAlarmManager.enroll(please);
     }
 
 }

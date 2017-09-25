@@ -1,8 +1,7 @@
 package nickwomble.com.beddybus.alarmSystem;
 
-import android.app.Activity;
-import android.content.Context;
 import android.location.Location;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,43 +14,51 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Observable;
-import java.util.Observer;
+import nickwomble.com.beddybus.MikesTestStuff.AlarmService;
 
 /**
  * Created by Womble on 9/9/2017.
  */
 
-public class LocationAlarmManager extends Observable{
+public class LocationAlarmManager {
     private String directionHead = "https://maps.googleapis.com/maps/api/directions/json?origin=";
     private String directionTail="&mode=drive&key="+ "AIzaSyDaS955G_Cgw4S4tubXJk1t_t2194Sk_VI";
-    private int bufferTime = 60 * 5; //seconds
+    private int bufferTime = 0; //seconds
     private int checkInterval = 0;//miliseconds
     private RequestQueue queue;
-    private MediaManager mediaManager =null;
-    private boolean alarmComplete = false;
+    private AlarmService alarmService;
+    private boolean inRangeForAlarm = false;
 
     private String lastReadingValue = "Location is being updated";
 
-    LocationAlarmManager(Context context, int _checkInterval) {
-        queue = Volley.newRequestQueue(context);
-        checkInterval= _checkInterval;
+    public LocationAlarmManager(AlarmService alarmService, int _checkInterval, int bufferTime) {
+        this.alarmService = alarmService;
+        queue = Volley.newRequestQueue(this.alarmService);
+        this.bufferTime = bufferTime;
+        checkInterval = _checkInterval;
         reset();
     }
+
     public void reset(){
-        mediaManager=null;
-        alarmComplete = false;
+        inRangeForAlarm = false;
     }
 
-    public void set(Location myLocation, Location destination, Activity activity){
+    public void updateCheckInterval(int howOften) { checkInterval = howOften; }
+
+    public void set(Location myLocation, Location destination){
+        Log.d("LocationAlarmManager", "set:" + myLocation.toString());
         String strLocation = myLocation.getLatitude() +","+myLocation.getLongitude();
         String strDestination = destination.getLatitude() + ","+destination.getLongitude();
-        enQueue(directionHead+strLocation+"&destination="+strDestination+directionTail, activity);
+        enQueue(directionHead+strLocation+"&destination="+strDestination+directionTail);
     }
-    private void enQueue(String url, final Activity activity){
-        if(alarmComplete()){
+
+    // UI/Activity now has the job of handling media when a result from the service gets broadcasted
+    private void enQueue(String url){
+
+        if(inRangeForAlarm()){
             return;
         }
+
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -59,14 +66,17 @@ public class LocationAlarmManager extends Observable{
                     public void onResponse(JSONObject response) {
                         try{
                             int secondsLeft = getSecondsFromJson(response);
+
+                            Log.d("LocationAlarmManager", "enQueue checking arrival");
                             if (hasArrived(secondsLeft)){
-                                mediaManager = new MediaManager(activity);
-                                mediaManager.activate();
-                                alarmComplete=true;
+                                inRangeForAlarm=true;
                             }
+
                             lastReadingValue = secondsToRealTime(secondsLeft);
-                            setChanged();
-                            notifyObservers();
+
+                            alarmService.performInRangeCheck();
+                            Log.d("LocationAlarmManager", "enQueue has="+inRangeForAlarm);
+
                         } catch (JSONException oops){
                             oops.printStackTrace();
                         }
@@ -79,6 +89,7 @@ public class LocationAlarmManager extends Observable{
                         error.printStackTrace();
                     }
                 });
+
         queue.add(jsObjRequest);
     }
 
@@ -89,7 +100,7 @@ public class LocationAlarmManager extends Observable{
         int mins = remainder / 60;
         remainder = remainder - mins * 60;
         int secs = remainder;
-        return hours+"hr, "+mins+"mins";
+        return hours+"hr, "+mins+"mins, "+secs+"seconds";
     }
 
     private int getSecondsFromJson(JSONObject res) throws JSONException {
@@ -113,18 +124,12 @@ public class LocationAlarmManager extends Observable{
         }
     }
     public void cancel(){
-        if(mediaManager !=null){
-            mediaManager.deactivate();
-        }
         reset();
     }
 
-    public boolean alarmComplete(){
-        return alarmComplete;
-    }
-    void enroll(Observer me){
-        this.addObserver(me);
-    }
+    public boolean inRangeForAlarm(){return inRangeForAlarm;}
+
+
     @Override
     public String toString(){
         return lastReadingValue;

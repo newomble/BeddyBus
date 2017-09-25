@@ -3,54 +3,89 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="nickwomble.com.beddybus.fragments.SetAlarm">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/text_view_1"
-            android:layout_alignParentTop="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="@string/label_destination"/>
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/linearLayout"
+            android:text="@string/label_destination"
+            android:textAlignment="center" />
+
         <TextView
-            android:layout_below="@+id/text_view_1"
             android:id="@+id/alarm_destination"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/default_location"
             android:textAlignment="center"
-            android:text="@string/default_location"/>
+            android:layout_below="@+id/text_view_1"
+            android:layout_alignParentStart="true" />
+
         <Button
             android:id="@+id/alarm_btn_set_location"
-            android:layout_below="@id/alarm_destination"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/label_set_location"/>
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/alarm_destination"
+            android:layout_marginTop="23dp"
+            android:text="@string/label_set_location" />
+
         <LinearLayout
-            android:layout_below="@+id/alarm_btn_set_location"
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:orientation="horizontal"
             android:weightSum="1">
+
             <TextView
-                android:text="@string/label_alarm_time"
+                android:id="@+id/textView"
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight=".5"
-                android:layout_height="wrap_content" />
+                android:text="@string/label_alarm_time" />
+
             <TextView
                 android:id="@+id/alarm_clock"
                 android:layout_width="0dp"
-                android:layout_weight=".5"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-            <Button
-                android:id="@+id/alarm_btn_start"
-                android:layout_alignParentBottom="true"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/label_start_app"
-                android:background="@drawable/go_button_inactive"/>
+                android:layout_weight=".5" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/alarm_btn_start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/go_button_inactive"
+            android:text="@string/label_start_app" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/alarm_destination"
+            android:layout_marginTop="69dp"
+            android:enabled="false"
+            android:text="Add To Favorites" />
+
+        <Button
+            android:id="@+id/alarm_settings_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/button2"
+            android:text="Alarm Settings" />
+
     </RelativeLayout>
 </FrameLayout>

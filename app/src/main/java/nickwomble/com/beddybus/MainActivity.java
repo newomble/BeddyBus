@@ -20,6 +20,7 @@ import nickwomble.com.beddybus.fragments.SetAlarm;
 public class MainActivity extends AppCompatActivity implements SetAlarm.OnFragmentInteractionListener{
 
     private Fragment alarmFragment = null;
+    public static final int MAIN_ACTIVITY_ID = 0;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -57,6 +58,13 @@ public class MainActivity extends AppCompatActivity implements SetAlarm.OnFragme
         transaction.replace(R.id.content, replacement);
         transaction.commit();
     }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+    }
+
 
     /*
         Returns the fragment for the third view

@@ -10,13 +10,21 @@
     <!--SetAlarm Fragment-->
     <string name="label_destination">Destination</string>
     <string name="label_safe_mode">Safe Mode</string>
-    <string name="label_alarm_time">Estimated Nap Time Remaining: </string>
+    <string name="label_alarm_time">Time Until Alarm: </string>
     <string name="label_start_app">Go To Sleep</string>
     <string name="label_stop_app">I\'m Awake</string>
     <string name="default_alarm">No Alarm Set</string>
     <string name="default_location">No Location Set</string>
     <string name="label_set_location">Set Destination</string>
     <string name="title_activity_map">MapActivity</string>
+    <string name="notification_switch">Send Notifications</string>
+    <string name="vibrate_switch">Vibrate On Alarm</string>
+    <string name="music_switch">Play Music On Alarm</string>
+    <string name="buffer_time_lbl">Sound Alarm Distance (Minutes)</string>
+    <string name="buffer_time_val">5</string>
+    <string name="music_select_lbl">Play Music On Alarm</string>
+    <string name="save_settings">Back</string>
+
 
     <!--Map Activity-->
     <string name="label_lock_location">Use this location</string>
